@@ -73,6 +73,12 @@ dependencies {
 
     // JSON
     implementation 'org.json:json:20230227'
+    // 다른 종속성들...
+
+    // 중복된 라이브러리 제외
+    configurations.all {
+        exclude group: 'com.vaadin.external.google', module: 'android-json'
+    }
 
     // Spring Boot Starter Mail 의존성 추가
     implementation 'org.springframework.boot:spring-boot-starter-mail'

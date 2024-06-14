@@ -5,9 +5,11 @@ import com.sparta.newsfeed.dto.BoardDto.BoardRequestDto;
 import com.sparta.newsfeed.entity.Users.User;
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.util.List;
 
+@Setter
 @Getter
 @Entity
 public class Board extends Timer {
@@ -59,5 +61,9 @@ public class Board extends Timer {
 
     public void update(BoardRequestDto boardRequestDto) {
         this.contents = boardRequestDto.getContents();
+    }
+
+    public void setId(long l) {
+        this.id = l;
     }
 }
