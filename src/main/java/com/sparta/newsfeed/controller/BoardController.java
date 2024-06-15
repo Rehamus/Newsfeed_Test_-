@@ -107,7 +107,6 @@ public class BoardController {
 
 
     @PatchMapping("/board/m") // Multimedia의 m
-
     @Operation(summary = "게시물 + 미디어 수정", tags = {"게시물"})
     @Parameters({
             @Parameter(name = "image", description = "이미지 수정시"),

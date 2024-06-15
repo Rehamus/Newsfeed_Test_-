@@ -8,10 +8,8 @@ import com.sparta.newsfeed.entity.Board;
 import com.sparta.newsfeed.entity.Comment;
 import com.sparta.newsfeed.entity.Users.User;
 import com.sparta.newsfeed.filter.TestMockFilter;
-import com.sparta.newsfeed.repository.CommentRepository;
 import com.sparta.newsfeed.service.CommentService;
 import jakarta.servlet.http.HttpServletRequest;
-import org.hamcrest.Matchers;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -63,8 +61,6 @@ class CommentControllerTest {
 
     private CommentResponseDto commentResponseDto;
 
-    @MockBean
-    private CommentRepository commentRepository;
 
 
     @BeforeEach
@@ -328,6 +324,9 @@ class CommentControllerTest {
     }
 
     //:::::::::::::// 도구 상자 //:::::::::::::://
+
+
+
     private static Comment getComment(User user, Board board) {
         Comment comment = new Comment();
         comment.setId(1L);

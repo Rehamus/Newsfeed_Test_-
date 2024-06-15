@@ -2,45 +2,47 @@ package com.sparta.newsfeed.dto.BoardDto;
 
 import com.sparta.newsfeed.entity.Board;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 
+@Setter
 @Getter
 public class BoardResponseDto {
 
-    private final Long board_id;
-    private final Long board_user_id;
-    private final String board_contents;
-    private final LocalDateTime created_time;
-    private final LocalDateTime modified_time;
+    private final Long boardId;
+    private final Long boardUserId;
+    private final String boardContents;
+    private final LocalDateTime createdTime;
+    private final LocalDateTime modifiedTime;
     private final Long Likecounts;
     private String message;
 
     public BoardResponseDto(Board board) {
-        this.board_id = board.getId();
-        this.board_user_id = board.getUser_id();
-        this.board_contents = board.getContents();
-        this.created_time = board.getCreatedTime();
-        this.modified_time = board.getModifiedTime();
+        this.boardId = board.getId();
+        this.boardUserId = board.getUser().getId();
+        this.boardContents = board.getContents();
+        this.createdTime = board.getCreatedTime();
+        this.modifiedTime = board.getModifiedTime();
         this.Likecounts = board.getLikecounts();
         this.message = "";
     }
 
     public BoardResponseDto(Board board, long Likecounts) {
-        this.board_id = board.getId();
-        this.board_user_id = board.getUser_id();
-        this.board_contents = board.getContents();
-        this.created_time = board.getCreatedTime();
-        this.modified_time = board.getModifiedTime();
+        this.boardId = board.getId();
+        this.boardUserId = board.getUser().getId();
+        this.boardContents = board.getContents();
+        this.createdTime = board.getCreatedTime();
+        this.modifiedTime = board.getModifiedTime();
         this.Likecounts = Likecounts;
     }
 
     public BoardResponseDto(Board board, long Likecounts, String message) {
-        this.board_id = board.getId();
-        this.board_user_id = board.getUser_id();
-        this.board_contents = board.getContents();
-        this.created_time = board.getCreatedTime();
-        this.modified_time = board.getModifiedTime();
+        this.boardId = board.getId();
+        this.boardUserId = board.getUser().getId();
+        this.boardContents = board.getContents();
+        this.createdTime = board.getCreatedTime();
+        this.modifiedTime = board.getModifiedTime();
         this.Likecounts = Likecounts;
         this.message = message;
     }

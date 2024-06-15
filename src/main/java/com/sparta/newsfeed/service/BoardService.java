@@ -30,6 +30,7 @@ import software.amazon.awssdk.services.s3.model.PutObjectResponse;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -183,7 +184,6 @@ public class BoardService {
 
     // 개시판 삭제
     @Transactional
-
     public String deleteBoard(HttpServletRequest servletRequest, BoardRequestDto boardRequestDto) {
         Board board = getStringBoard(servletRequest, boardRequestDto);
         boardRepository.delete(board);
