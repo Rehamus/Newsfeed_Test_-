@@ -27,7 +27,7 @@ public class CommentController {
     }
 
     @GetMapping("/{boardId}/comment")
-    @Operation(summary = "개시판의 댓글 조회", tags = {"댓글"})
+    @Operation(summary = "개시판의 특정 댓글 조회", tags = {"댓글"})
     public List<CommentResponseDto> boardComment(
             @PathVariable Long boardId) {
         return commentService.boardComment(boardId);

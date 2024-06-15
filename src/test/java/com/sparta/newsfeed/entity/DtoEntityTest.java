@@ -7,6 +7,7 @@ import com.sparta.newsfeed.dto.CommentDto.CommentRequestDto;
 import com.sparta.newsfeed.dto.CommentDto.CommentResponseDto;
 import com.sparta.newsfeed.dto.UserDto.SignUpRequestDto;
 import com.sparta.newsfeed.dto.UserDto.UserResponseDto;
+import com.sparta.newsfeed.entity.Likes.ContentsLike;
 import com.sparta.newsfeed.entity.Users.User;
 import com.sparta.newsfeed.repository.*;
 import org.junit.jupiter.api.BeforeEach;
@@ -174,6 +175,24 @@ public class DtoEntityTest {
     }
 
     @Test
+    @DisplayName("개시판 업데이트 실패 태스트")
+    public void testUpdateFailBoard() {
+        // given
+        Board Boards = getBoard();
+        BoardRequestDto updatedBoardRequestDto = new BoardRequestDto();
+        updatedBoardRequestDto.setContents("업데이트 테스트");
+
+        // when
+        Boards.update(updatedBoardRequestDto);
+
+        String updatedBoard = boardRepository.findById(Boards.getId()).get().getContents();
+
+        // then
+        // Transactional이 없어서 바뀌지 않아야 정상
+        assertEquals(updatedBoard, "Test contents");
+    }
+
+    @Test
     @DisplayName("개시판 삭제 태스트")
     public void testDeleteBoard() {
         // given
@@ -296,6 +315,49 @@ public class DtoEntityTest {
         assertEquals(commentResponseDto.getMessage(), "태스트 확인");
     }
 
+    @Test
+    @DisplayName("댓글 보기 실패 태스트")
+    @Transactional
+    public void CommentResponseDtoFailTest() {
+        // given
+        Comment comment = new Comment();
+        commentRepository.save(comment);
+
+        // when // then
+        // null값이 나오면 정상
+        NullPointerException commentResponseDto = assertThrows(NullPointerException.class, () -> {
+            new CommentResponseDto(comment, 5L, "태스트 확인");
+        });
+    }
+
+    @Test
+    @DisplayName("개시판 좋아요 태스트")
+    public void BoardContentsLikeTest() {
+        // given
+        Board Boards = getBoard();
+        ContentsLike contentsLike = new ContentsLike(user,Boards);
+
+        // when
+        ContentsLike contentsLikeTest = ContentsLikeRepository.save(contentsLike);
+
+        // then
+        assertEquals(contentsLikeTest.getContents(), contentsLike.getContents());
+    }
+
+    @Test
+    @DisplayName("댓글 좋아요 태스트")
+    public void CommentContentsLikeTest() {
+        // given
+        Comment comment = new Comment();
+        ContentsLike contentsLike = new ContentsLike(user,comment);
+        ContentsLikeRepository.save(contentsLike);
+        // when
+        ContentsLike contentsLikeTest = ContentsLikeRepository.save(contentsLike);
+
+        // then
+        assertEquals(contentsLikeTest.getContents(), contentsLike.getContents());
+    }
+
     //보드 가져오기
     private Board getBoard() {
         BoardRequestDto boardRequestDto = new BoardRequestDto();
@@ -306,5 +368,10 @@ public class DtoEntityTest {
         Board Boards = boardRepository.save(board);
         return board;
     }
+
+
+
+
+
 
 }
