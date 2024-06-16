@@ -331,7 +331,11 @@ class BoardControllerTest {
                                 .file(imageFile)
                                 .file(movieFile)
                                 .part(new MockPart("board", boardJsonUpdate.getBytes()))
-                                .contentType(MediaType.MULTIPART_FORM_DATA))
+                                .contentType(MediaType.MULTIPART_FORM_DATA)
+                                .with(request -> {
+                                    request.setMethod("PATCH");
+                                    return request;
+                                }))
                 .andExpect(status().isOk())
                 .andDo(print());
     }

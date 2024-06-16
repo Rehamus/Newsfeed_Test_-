@@ -136,7 +136,7 @@ public class CommentService {
     }
 
     // id로 Board 가져오기
-    private Board getBoard(Long id) {
+    public Board getBoard(Long id) {
         return boardRepository.findById(id).orElseThrow(
                 () -> new IllegalArgumentException("해당 개시판이 없습니다."));
 

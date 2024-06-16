@@ -95,3 +95,6 @@ jacocoTestReport {
         html.outputLocation.set(layout.buildDirectory.dir('jacocoHtml'))
     }
 }
+test {
+    jvmArgs '-XX:+EnableDynamicAgentLoading'
+}

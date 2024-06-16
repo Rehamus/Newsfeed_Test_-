@@ -88,7 +88,7 @@ public class BoardService {
 
 
     // s3 사용
-    private void uploadFileToS3(String key, byte[] bytes, String contentType) {
+    public void uploadFileToS3(String key, byte[] bytes, String contentType) {
         if (bytes.length > 10 * 1024 * 1024 && contentType.toLowerCase().contains("image")) {
             throw new IllegalArgumentException("이미지 용량이 너무 큽니다. 최대 10MB까지 업로드 가능합니다.");
         } else if (bytes.length > 200 * 1024 * 1024 && (contentType.toLowerCase().contains("mp4") || contentType.toLowerCase().contains("avi"))) {
@@ -106,7 +106,7 @@ public class BoardService {
         }
     }
 
-    private String getS3Url(String key) {
+    public String getS3Url(String key) {
         return "https://onebytenewsfeed.s3.amazonaws.com/" + key;
     }
 
@@ -240,7 +240,7 @@ public class BoardService {
 
 
     //개시판 유저 체크
-    private Board getStringBoard(HttpServletRequest servletRequest, BoardRequestDto boardRequestDto) {
+    public Board getStringBoard(HttpServletRequest servletRequest, BoardRequestDto boardRequestDto) {
         User user = jwt.getTokenUser(servletRequest);
         Board board = getIdBoard(boardRequestDto);
         if (!user.getId().equals(board.getUser().getId())) {
@@ -250,13 +250,13 @@ public class BoardService {
     }
 
     // 문자열 Board로 변환
-    private BoardRequestDto getStringBoard(String board) throws JsonProcessingException {
+    public BoardRequestDto getStringBoard(String board) throws JsonProcessingException {
         return objectMapper.readValue(board, BoardRequestDto.class);
     }
 
     // 개시판 id로 찾아서 가셔오기
 
-    private Board getIdBoard(BoardRequestDto boardRequestDto) {
+    public Board getIdBoard(BoardRequestDto boardRequestDto) {
         Optional<Board> boards = boardRepository.findById(boardRequestDto.getId());
         if (boards.isEmpty()) throw new NullPointerException("사용자의 개시물이 없습니다.");
         return boards.get();
