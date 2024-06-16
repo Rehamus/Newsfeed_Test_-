@@ -60,12 +60,6 @@ class BoardControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
 
-    private BoardRequestDto boardRequestDto;
-
-    private BoardResponseDto boardResponseDto;
-
-
-
     @BeforeEach
     void setUp() {
         mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext)

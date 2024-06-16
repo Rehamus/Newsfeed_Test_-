@@ -57,11 +57,6 @@ class CommentControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
 
-    private CommentRequestDto commentRequestDto;
-
-    private CommentResponseDto commentResponseDto;
-
-
 
     @BeforeEach
     void setUp() {
