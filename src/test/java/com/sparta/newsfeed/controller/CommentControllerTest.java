@@ -74,13 +74,19 @@ class CommentControllerTest {
     @Test
     @DisplayName("댓글 작성")
     void createComment() throws Exception {
-        when(commentService.createComment(any(), anyLong(), any())).thenReturn("댓글 생성완료");
+        // given
+        CommentRequestDto commentRequestDto = new CommentRequestDto();
+        commentRequestDto.setContents("태스트 댓글");
+        Board board = getBoard(getUser());
+
+        when(commentService.createComment(any(), anyLong(), any())).thenReturn("개시판 ::" + board.getContents() + "의\n " + commentRequestDto.getContents() + "라는 댓글이 입력되었습니다.");
         // when - then
         mockMvc.perform(post("/api/board/{boardId}/comment", 1L)
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(commentRequestDto)))
                 .andExpect(status().isOk())
-                .andExpect(content().string("댓글 생성완료"))
+                .andExpect(content().string("개시판 ::게시글 내용의\n" +
+                                                    " 태스트 댓글라는 댓글이 입력되었습니다."))
                 .andDo(print());
     }
 
@@ -188,6 +194,7 @@ class CommentControllerTest {
         Comment comment = getComment();
         CommentResponseDto commentResponseDto = new CommentResponseDto(comment, 1L, "좋아요 테스트");
 
+        // when
         if (repetitionInfo.getCurrentRepetition() > 1) {
             when(commentService.boardCommentLike(any(), anyLong(), anyLong()))
                     .thenThrow(new IllegalArgumentException("이미 좋아요를 눌렀습니다"));
@@ -226,7 +233,7 @@ class CommentControllerTest {
         commentResponseDto.setMessage("좋아요가 취소되 었습니다 태스트");
 
         // when
-        when(commentService.boardCommentLike(any(), anyLong(), anyLong())).thenReturn(commentResponseDto);
+        when(commentService.boardCommentNolike(any(), anyLong(), anyLong())).thenReturn(commentResponseDto);
 
         // then
         mockMvc.perform(get("/api/board/{boardId}/comment/{commentId}/nolike", boardId,commentId))
@@ -248,10 +255,10 @@ class CommentControllerTest {
         CommentResponseDto commentResponseDto = new CommentResponseDto(comment, 1L, "좋아요 테스트");
 
         if (repetitionInfo.getCurrentRepetition() > 1) {
-            when(commentService.boardCommentLike(any(), anyLong(), anyLong()))
+            when(commentService.boardCommentNolike(any(), anyLong(), anyLong()))
                     .thenThrow(new IllegalArgumentException("좋아요를 누르지 않았습니다"));
         } else {
-            when(commentService.boardCommentLike(any(), anyLong(), anyLong())).thenReturn(commentResponseDto);
+            when(commentService.boardCommentNolike(any(), anyLong(), anyLong())).thenReturn(commentResponseDto);
         }
 
         // when - then

@@ -1,20 +1,14 @@
 package com.sparta.newsfeed.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sparta.newsfeed.config.WebSecurityConfig;
 import com.sparta.newsfeed.dto.BoardDto.BoardRequestDto;
 import com.sparta.newsfeed.dto.BoardDto.BoardResponseDto;
-import com.sparta.newsfeed.dto.CommentDto.CommentRequestDto;
 import com.sparta.newsfeed.entity.Board;
-import com.sparta.newsfeed.entity.Comment;
 import com.sparta.newsfeed.entity.Users.User;
 import com.sparta.newsfeed.filter.TestMockFilter;
 import com.sparta.newsfeed.service.BoardService;
-import jakarta.servlet.http.HttpServletRequest;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -23,10 +17,10 @@ import org.springframework.context.annotation.FilterType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.http.MediaType;
-import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.mock.web.MockPart;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
@@ -36,7 +30,7 @@ import java.util.List;
 import java.util.Map;
 
 import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -193,6 +187,42 @@ class BoardControllerTest {
                 .andDo(print());
     }
 
+    @RepeatedTest(value = 3, name = "좋아요 실패 테스트 {currentRepetition}/{totalRepetitions}")
+    @DisplayName("게시글 좋아요 실패 테스트")
+    void getBoardLikeFail(RepetitionInfo repetitionInfo) throws Exception {
+        // given
+        Long boardId = 1L;
+        Board board = getBoard(getUser());
+        String like_m = "좋아요를 누르셨습니다.";
+        BoardResponseDto responseDto = new BoardResponseDto(board, 1L, like_m);
+
+        // when
+        if (repetitionInfo.getCurrentRepetition() > 1) {
+            when(boardService.getBoardLike(any(),anyLong()))
+                    .thenThrow( new IllegalArgumentException("이미 좋아요를 눌렀습니다"));
+
+        } else {
+            when(boardService.getBoardLike(any(),anyLong())).thenReturn(responseDto);
+        }
+
+        // then
+        ResultActions resultActions =  mockMvc.perform(get("/api/board/v/{boardId}/like", boardId));
+        if (repetitionInfo.getCurrentRepetition() > 1) {
+            resultActions
+                    .andExpect(status().isBadRequest())
+                    .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                    .andExpect(jsonPath("$.message").value("이미 좋아요를 눌렀습니다"))
+                .andDo(print());
+        } else {
+            resultActions.andExpect(status().isOk())
+                    .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                    .andExpect(jsonPath("$.likecounts").value(1L))
+                    .andExpect(jsonPath("$.message").value("좋아요를 누르셨습니다."))
+                    .andDo(print());
+        }
+
+    }
+
     @Test
     @DisplayName("게시글 좋아요 취소 테스트")
     void getBoardNolike() throws Exception {
@@ -215,6 +245,40 @@ class BoardControllerTest {
                 .andExpect(jsonPath("$.boardContents").value("게시글 내용"))
                 .andExpect(jsonPath("$.message").value("좋아요가 취소되었습니다."))
                 .andDo(print());
+    }
+
+    @RepeatedTest(value = 3, name = "좋아요 실패 테스트 {currentRepetition}/{totalRepetitions}")
+    @DisplayName("게시글 좋아요 취소 실패 테스트")
+    void getBoardNolikeFail(RepetitionInfo repetitionInfo) throws Exception {
+        // given
+        Long boardId = 1L;
+        Board board = getBoard(getUser());
+        String like_m =  "좋아요가 취소되었습니다.";
+        BoardResponseDto responseDto = new BoardResponseDto(board, 0L, like_m);
+
+        // when
+        if (repetitionInfo.getCurrentRepetition() > 1) {
+            when(boardService.getBoardNolike(any(),anyLong()))
+                    .thenThrow( new IllegalArgumentException("좋아요를 안눌렀습니다"));
+
+        } else {
+            when(boardService.getBoardNolike(any(),anyLong())).thenReturn(responseDto);
+        }
+        // then
+        ResultActions resultActions =   mockMvc.perform(get("/api/board/v/{boardId}/nolike", boardId));
+        if (repetitionInfo.getCurrentRepetition() > 1) {
+            resultActions
+                    .andExpect(status().isBadRequest())
+                    .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                    .andExpect(jsonPath("$.message").value("좋아요를 안눌렀습니다"))
+                    .andDo(print());
+        } else {
+            resultActions.andExpect(status().isOk())
+                    .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                    .andExpect(jsonPath("$.likecounts").value(0L))
+                    .andExpect(jsonPath("$.message").value( "좋아요가 취소되었습니다."))
+                    .andDo(print());
+        }
     }
 
     @Test
@@ -275,6 +339,32 @@ class BoardControllerTest {
                                 .part(new MockPart("board", boardJsonUpdate.getBytes()))
                                 .contentType(MediaType.MULTIPART_FORM_DATA))
                 .andExpect(status().isOk())
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("게시글 + 미디어 업데이트 테스트 실패 케이스")
+    void updateMBoardFailure() throws Exception {
+        // Given
+        Map<String, Object> boardMap = new HashMap<>();
+        boardMap.put("id", 1L);
+        boardMap.put("contents", "수정된 게시글 내용");
+
+        String boardJsonUpdate = objectMapper.writeValueAsString(boardMap);
+
+        MockMultipartFile imageFile = new MockMultipartFile("image", "image.jpg", MediaType.IMAGE_JPEG_VALUE, "dummy_image_data".getBytes());
+        MockMultipartFile movieFile = new MockMultipartFile("movie", "movie.mp4", MediaType.APPLICATION_OCTET_STREAM_VALUE, "dummy_movie_data".getBytes());
+
+        // When
+        when(boardService.updateMBoard(any(), any(), any(), any()))
+                .thenThrow(new RuntimeException("업데이트 실패"));
+
+        // Then
+        mockMvc.perform(multipart("/api/board/m")
+                                .file(imageFile)
+                                .file(movieFile)
+                                .contentType(MediaType.MULTIPART_FORM_DATA))
+                .andExpect(status().isBadRequest())
                 .andDo(print());
     }
 
