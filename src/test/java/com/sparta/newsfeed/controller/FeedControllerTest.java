@@ -1,13 +1,17 @@
 package com.sparta.newsfeed.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sparta.newsfeed.config.WebSecurityConfig;
 import com.sparta.newsfeed.dto.BoardDto.BoardResponseDto;
 import com.sparta.newsfeed.dto.UserDto.SignUpRequestDto;
+import com.sparta.newsfeed.entity.Board;
+import com.sparta.newsfeed.entity.Users.User;
 import com.sparta.newsfeed.filter.TestMockFilter;
 import com.sparta.newsfeed.service.FeedService;
 import com.sparta.newsfeed.service.SignUpService;
 import com.sparta.newsfeed.service.UserService;
+import jakarta.servlet.http.HttpServletRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -28,10 +32,11 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 @WebMvcTest(
         controllers = {FeedController.class},
@@ -42,7 +47,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
                 )
         }
 )
-@DisplayName("필 태스트")
+@DisplayName("피드 태스트")
 class FeedControllerTest {
 
     @MockBean
@@ -65,26 +70,44 @@ class FeedControllerTest {
     }
 
     @Test
-    void getFeed() {
+    @DisplayName("피드 해둔 개시물 태스트")
+    void getFeed() throws Exception {
         // given
-        SignUpRequestDto requestDto = new SignUpRequestDto();
-        requestDto.setUserId("testUser123");
-        requestDto.setPassword("Test1234!@");
-        requestDto.setUsername("testUser");
-        requestDto.setEmail("testuser@example.com");
-        requestDto.setOne_liner("Hello, I am testUser!");
-
+        Board board = getBoard(getUser());
         List<BoardResponseDto> boardResponseDtoList = new ArrayList<>();
+        BoardResponseDto responseDto = new BoardResponseDto(board);
+        boardResponseDtoList.add(responseDto);
 
         // when
-        when(feedService.getFeed(any())).thenReturn(boardResponseDtoList);
+        when(feedService.getFeed(any(HttpServletRequest.class))).thenReturn(boardResponseDtoList);
 
         // then
-        mockMvc.perform(post("/api/feed")
+        mockMvc.perform(get("/api/feed")
                                 .contentType(MediaType.APPLICATION_JSON)
-                                .content(objectMapper.writeValueAsString(requestDto)))
+                                .content(objectMapper.writeValueAsString(boardResponseDtoList)))
                 .andExpect(status().isOk())
-                .andExpect(content().string("testuser@example.com 로 발송된 인증코드를 확인해주세요."))
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$[0].boardId").value(1L))
+                .andExpect(jsonPath("$[0].boardUserId").value(1L))
+                .andExpect(jsonPath("$[0].boardContents").value("게시글 내용"))
                 .andDo(print());
+    }
+
+    //:::::::::::::// 도구 상자 //:::::::::::::://
+
+
+    private static Board getBoard(User user) {
+        Board board = new Board();
+        board.setId(1L);
+        board.setContents("게시글 내용");
+        board.setUser(user);
+        return board;
+    }
+
+    private static User getUser() {
+        User user = new User();
+        user.setId(1L);
+        user.setUsername("사용자1");
+        return user;
     }
 }
