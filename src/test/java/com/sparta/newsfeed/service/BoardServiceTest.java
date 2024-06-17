@@ -96,7 +96,7 @@ class BoardServiceTest {
 
     }
 
-  /*  @Test
+    @Test
     @DisplayName("개시판 + 미디어 생성 완료")
     void createMBoard() {
         MockitoAnnotations.openMocks(this);
@@ -117,7 +117,7 @@ class BoardServiceTest {
         assertEquals("생성 완료", board);
         verify(boardRepository, times(1)).save(any(Board.class));
         verify(multimediaRepository, times(1)).save(any(Multimedia.class));
-    }*/
+    }
 
     @Test
     @DisplayName("게시판 목록 조회 테스트")
@@ -430,7 +430,7 @@ class BoardServiceTest {
         System.out.println("메세지 :" + result);
     }
 
-    /*@Test
+    @Test
     @DisplayName("개시판 + 미디어 업데이트 태스트")
     void updateMBoard() throws JsonProcessingException {
         // given
@@ -465,7 +465,7 @@ class BoardServiceTest {
         // then
         assertEquals("수정 완료", result);
         verify(multimediaRepository, times(1)).save(any(Multimedia.class));
-    }*/
+    }
 
 
     private static void ResultMessage(BoardResponseDto resultDto) {

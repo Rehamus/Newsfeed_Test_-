@@ -1,7 +1,9 @@
 package com.sparta.newsfeed.dto.UserDto;
 
 import lombok.Getter;
+import lombok.Setter;
 
+@Setter
 @Getter
 public class UserRequestDto {
 
