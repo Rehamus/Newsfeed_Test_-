@@ -106,7 +106,7 @@ class SignUpServiceTest {
     }
 
     @Test
-    @DisplayName("댓글")
+    @DisplayName("이매일 인증 완료")
     void verifyEmail() {
         // given
         EmailRequestDto requestDto = new EmailRequestDto();
