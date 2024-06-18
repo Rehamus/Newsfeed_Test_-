@@ -50,7 +50,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
                 )
         }
 )
-@DisplayName("팔로우 태스트")
+@DisplayName("팔로우 테스트")
 class FollowControllerTest {
 
     @MockBean
@@ -76,7 +76,7 @@ class FollowControllerTest {
     }
 
     @Test
-    @DisplayName(" 팔로우 하기 태스트 ")
+    @DisplayName(" 팔로우 하기 테스트 ")
     void followUser() throws Exception {
         // given
         Long followeeId = 1L;
@@ -97,7 +97,7 @@ class FollowControllerTest {
     }
 
     @Test
-    @DisplayName("언팔로우 하기 태스트")
+    @DisplayName("언팔로우 하기 테스트")
     void unfollowUser() throws Exception {
         // given
         Long followeeId = 1L;
@@ -119,7 +119,7 @@ class FollowControllerTest {
     }
 
     @Test
-    @DisplayName("팔로우 상태 태스트")
+    @DisplayName("팔로우 상태 테스트")
     void checkFollowStatus() throws Exception {
         // given
         Long followeeId = 1L;

@@ -45,7 +45,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
                 )
         }
 )
-@DisplayName("개시판 태스트")
+@DisplayName("게시판 테스트")
 class BoardControllerTest {
 
     @MockBean
@@ -73,7 +73,7 @@ class BoardControllerTest {
     void createBoard() throws Exception {
         // given
         BoardRequestDto boardRequestDto = new BoardRequestDto();
-        boardRequestDto.setContents("태스트 개시판");
+        boardRequestDto.setContents("테스트 게시판");
         Board board = new Board(getUser(), boardRequestDto);
         // when
         when(boardService.createBoard(any(), any())).thenReturn(board.getContents() + " 생성 완료");

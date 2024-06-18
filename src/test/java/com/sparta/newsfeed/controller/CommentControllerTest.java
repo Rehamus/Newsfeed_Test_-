@@ -42,7 +42,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
                 )
         }
 )
-@DisplayName("댓글 태스트")
+@DisplayName("댓글 테스트")
 class CommentControllerTest {
 
     @MockBean
@@ -71,7 +71,7 @@ class CommentControllerTest {
     void createComment() throws Exception {
         // given
         CommentRequestDto commentRequestDto = new CommentRequestDto();
-        commentRequestDto.setContents("태스트 댓글");
+        commentRequestDto.setContents("테스트 댓글");
         Board board = getBoard(getUser());
 
         when(commentService.createComment(any(), anyLong(), any())).thenReturn("개시판 ::" + board.getContents() + "의\n " + commentRequestDto.getContents() + "라는 댓글이 입력되었습니다.");
@@ -81,7 +81,7 @@ class CommentControllerTest {
                                 .content(objectMapper.writeValueAsString(commentRequestDto)))
                 .andExpect(status().isOk())
                 .andExpect(content().string("개시판 ::게시글 내용의\n" +
-                                                    " 태스트 댓글라는 댓글이 입력되었습니다."))
+                                                    " 테스트 댓글라는 댓글이 입력되었습니다."))
                 .andDo(print());
     }
 
@@ -165,7 +165,7 @@ class CommentControllerTest {
         Long commentId = 1L;
         Comment comment = getComment();
 
-        CommentResponseDto commentResponseDto = new CommentResponseDto(comment,1,"좋아요 태스트");
+        CommentResponseDto commentResponseDto = new CommentResponseDto(comment,1,"좋아요 테스트");
 
         // when
         when(commentService.boardCommentLike(any(), anyLong(), anyLong())).thenReturn(commentResponseDto);
@@ -176,7 +176,7 @@ class CommentControllerTest {
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.id").value(commentId))
                 .andExpect(jsonPath("$.like_count").value(1L))
-                .andExpect(jsonPath("$.message").value("좋아요 태스트"))
+                .andExpect(jsonPath("$.message").value("좋아요 테스트"))
                 .andDo(print());
     }
 
@@ -224,8 +224,8 @@ class CommentControllerTest {
         Long boardId = 1L;
         Long commentId = 1L;
         Comment comment = getComment();
-        CommentResponseDto commentResponseDto = new CommentResponseDto(comment,0,"좋아요 태스트");
-        commentResponseDto.setMessage("좋아요가 취소되 었습니다 태스트");
+        CommentResponseDto commentResponseDto = new CommentResponseDto(comment,0,"좋아요 테스트");
+        commentResponseDto.setMessage("좋아요가 취소되 었습니다 테스트");
 
         // when
         when(commentService.boardCommentNolike(any(), anyLong(), anyLong())).thenReturn(commentResponseDto);
@@ -236,7 +236,7 @@ class CommentControllerTest {
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.id").value(commentId))
                 .andExpect(jsonPath("$.like_count").value(0L))
-                .andExpect(jsonPath("$.message").value("좋아요가 취소되 었습니다 태스트"))
+                .andExpect(jsonPath("$.message").value("좋아요가 취소되 었습니다 테스트"))
                 .andDo(print());
     }
 

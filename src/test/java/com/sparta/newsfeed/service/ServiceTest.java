@@ -71,7 +71,7 @@ public class ServiceTest {
     private MockHttpServletResponse response = new MockHttpServletResponse();
     private MockHttpServletRequest request = new MockHttpServletRequest();
 
-    @RepeatedTest(value = 2, name = "개시판 생성 {currentRepetition}/{totalRepetitions}")
+    @RepeatedTest(value = 2, name = "게시판 생성 {currentRepetition}/{totalRepetitions}")
     @Order(1)
     @DisplayName("회원가입")
     void test1(RepetitionInfo repetitionInfo) {
@@ -242,14 +242,14 @@ public class ServiceTest {
         assertEquals("프로필 사진 삽입완료", updateUserProfile);
 
     }
-    @RepeatedTest(value = 3, name = "개시판 생성 {currentRepetition}/{totalRepetitions}")
+    @RepeatedTest(value = 3, name = "게시판 생성 {currentRepetition}/{totalRepetitions}")
     @Order(10)
-    @DisplayName("개시판 생성")
+    @DisplayName("게시판 생성")
     void test10() {
         // given
         makecookie();
         BoardRequestDto boardRequestDto = new BoardRequestDto();
-        boardRequestDto.setContents("개시판 생성");
+        boardRequestDto.setContents("게시판 생성");
 
         // when
         String createBoard = boardService.createBoard(request,boardRequestDto);
@@ -260,13 +260,13 @@ public class ServiceTest {
 
     @Test
     @Order(11)
-    @DisplayName("개시판 수정")
+    @DisplayName("게시판 수정")
     void test11() {
         // given
         makecookie();
         BoardRequestDto boardRequestDto = new BoardRequestDto();
         boardRequestDto.setId(1L);
-        boardRequestDto.setContents("개시판 수정");
+        boardRequestDto.setContents("게시판 수정");
 
         // when
         String updateBoard = boardService.updateBoard(request,boardRequestDto);
@@ -277,14 +277,14 @@ public class ServiceTest {
 
     @Test
     @Order(12)
-    @DisplayName("개시판 좋아요")
+    @DisplayName("게시판 좋아요")
     void test12() {
         // given
         makecookie();
         Long boardId = 1L;
         BoardRequestDto boardRequestDto = new BoardRequestDto();
         boardRequestDto.setId(1L);
-        boardRequestDto.setContents("개시판 수정");
+        boardRequestDto.setContents("게시판 수정");
 
         // when
         BoardResponseDto getBoardLike = boardService.getBoardLike(request, boardId);
@@ -296,7 +296,7 @@ public class ServiceTest {
 
     @Test
     @Order(13)
-    @DisplayName("미디어 개시판 생성")
+    @DisplayName("미디어 게시판 생성")
     void test13() throws JsonProcessingException {
         // given
         makecookie();
@@ -314,7 +314,7 @@ public class ServiceTest {
 
     @Test
     @Order(14)
-    @DisplayName("개시판 전체 조회")
+    @DisplayName("게시판 전체 조회")
     void test14()  {
         // given
         makecookie();
@@ -333,7 +333,7 @@ public class ServiceTest {
 
     @Test
     @Order(15)
-    @DisplayName("개시판 특정 조회")
+    @DisplayName("게시판 특정 조회")
     void test15()  {
         // given
         makecookie();
@@ -348,7 +348,7 @@ public class ServiceTest {
 
     @Test
     @Order(16)
-    @DisplayName("개시판 좋아요 취소")
+    @DisplayName("게시판 좋아요 취소")
     void test16() {
         // given
         makecookie();
@@ -364,7 +364,7 @@ public class ServiceTest {
 
     @Test
     @Order(17)
-    @DisplayName("개시판 삭제")
+    @DisplayName("게시판 삭제")
     void test17() {
         // given
         makecookie();
@@ -430,7 +430,7 @@ public class ServiceTest {
         assertEquals("투정운은(는) 삼정운을(를) 팔로우하고 있지 않습니다.", checkFollowStatus.getStatusMessage());
     }
 
-    @RepeatedTest(value = 3, name = "개시판 생성 {currentRepetition}/{totalRepetitions}")
+    @RepeatedTest(value = 3, name = "게시판 생성 {currentRepetition}/{totalRepetitions}")
     @Order(21)
     @DisplayName("댓글 생성")
     void test21() {
@@ -444,13 +444,13 @@ public class ServiceTest {
         String createComment = commentService.createComment(request,2L,commentRequestDto);
 
         // then
-        assertEquals("개시판 ::개시판 생성의\n" +
+        assertEquals("게시판 ::게시판 생성의\n" +
                              " 댓글 내용라는 댓글이 입력되었습니다.", createComment);
     }
 
     @Test
     @Order(22)
-    @DisplayName("댓글 개시판 전체 조회")
+    @DisplayName("댓글 게시판 전체 조회")
     void test22() {
         // given
         makecookie();
@@ -465,7 +465,7 @@ public class ServiceTest {
 
     @Test
     @Order(23)
-    @DisplayName("댓글 개시판 특정 조회")
+    @DisplayName("댓글 게시판 특정 조회")
     void test23() {
         // given
         makecookie();
@@ -479,7 +479,7 @@ public class ServiceTest {
 
     @Test
     @Order(24)
-    @DisplayName("댓글 개시판 특정 좋아요")
+    @DisplayName("댓글 게시판 특정 좋아요")
     void test24() {
         // given
         makecookie();
@@ -494,7 +494,7 @@ public class ServiceTest {
 
     @Test
     @Order(25)
-    @DisplayName("댓글 개시판 특정 좋아요 취소")
+    @DisplayName("댓글 게시판 특정 좋아요 취소")
     void test25() {
         // given
         makecookie();

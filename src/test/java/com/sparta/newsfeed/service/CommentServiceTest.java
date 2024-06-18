@@ -31,7 +31,7 @@ import static org.mockito.Mockito.*;
 
 
 @ExtendWith(MockitoExtension.class)
-@DisplayName("댓글 태스트")
+@DisplayName("댓글 테스트")
 class CommentServiceTest {
 
     @Mock
@@ -59,7 +59,7 @@ class CommentServiceTest {
 
 
     @Test
-    @DisplayName("댓글 생성 태스트")
+    @DisplayName("댓글 생성 테스트")
     void createComment() {
         // given
         CommentRequestDto commentRequestDto = new CommentRequestDto();
@@ -84,7 +84,7 @@ class CommentServiceTest {
 
 
     @Test
-    @DisplayName("개시판의 댓글 전채 조회 태스트")
+    @DisplayName("개시판의 댓글 전채 조회 테스트")
     void boardComment() {
         // given
         User user = getUser();
@@ -115,7 +115,7 @@ class CommentServiceTest {
     }
 
     @Test
-    @DisplayName("특정 댓글 보기 태스트")
+    @DisplayName("특정 댓글 보기 테스트")
     void boardCommentView() {
         // given
         Comment comment = getComment();
@@ -131,7 +131,7 @@ class CommentServiceTest {
     }
 
     @Test
-    @DisplayName("댓글 좋아요 태스트")
+    @DisplayName("댓글 좋아요 테스트")
     void boardCommentLike() {
         // given
         User user = getUser();
@@ -157,7 +157,7 @@ class CommentServiceTest {
     }
 
     @Test
-    @DisplayName("댓글 좋아요 실패 태스트")
+    @DisplayName("댓글 좋아요 실패 테스트")
     void boardCommentLikeFail() {
         // given
         User user = getUser();
@@ -180,7 +180,7 @@ class CommentServiceTest {
     }
 
     @Test
-    @DisplayName("댓글 좋아요 취소 태스트")
+    @DisplayName("댓글 좋아요 취소 테스트")
     void boardCommentNolike() {
         // given
         User user = getUser();
@@ -208,7 +208,7 @@ class CommentServiceTest {
 
 
     @Test
-    @DisplayName("댓글 좋아요 취소 실패 태스트")
+    @DisplayName("댓글 좋아요 취소 실패 테스트")
     void boardCommentNolikeFail() {
         // given
         User user = getUser();
@@ -232,7 +232,7 @@ class CommentServiceTest {
     }
 
     @Test
-    @DisplayName("댓글 업데이트 태스트")
+    @DisplayName("댓글 업데이트 테스트")
     void updateComment() {
         // given
         User user = getUser();
@@ -258,7 +258,7 @@ class CommentServiceTest {
     }
 
     @Test
-    @DisplayName("댓글 업데이트 실페 태스트")
+    @DisplayName("댓글 업데이트 실페 테스트")
     void updateCommentFail() {
         // given
         User user = getUser();

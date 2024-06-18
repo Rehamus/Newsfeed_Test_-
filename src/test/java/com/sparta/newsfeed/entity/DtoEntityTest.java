@@ -10,6 +10,8 @@ import com.sparta.newsfeed.dto.UserDto.UserResponseDto;
 import com.sparta.newsfeed.entity.Likes.ContentsLike;
 import com.sparta.newsfeed.entity.Users.User;
 import com.sparta.newsfeed.repository.*;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.Validator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -22,6 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
@@ -29,7 +32,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(MockitoExtension.class)
 @SpringBootTest(classes = NewsFeedApplication.class)
-@DisplayName("DTO,Entity 태스트")
+@DisplayName("DTO,Entity 테스트")
 public class DtoEntityTest {
 
     @Autowired
@@ -47,9 +50,14 @@ public class DtoEntityTest {
     @Autowired
     private FollowRepository followRepository;
 
+    @Autowired
+    private Validator validator;
+
     private User user;
     private BoardRequestDto boardRequestDto;
     private CommentRequestDto commentRequestDto;
+
+
 
 
     @BeforeEach
@@ -69,7 +77,7 @@ public class DtoEntityTest {
     }
 
     @Test
-    @DisplayName("유저 회원 가입 dto 태스트")
+    @DisplayName("유저 회원 가입 dto 테스트")
     public void testSignUpRequestDto() {
         // given
         SignUpRequestDto dto = new SignUpRequestDto();
@@ -91,27 +99,31 @@ public class DtoEntityTest {
     }
 
     @Test
-    @DisplayName("유저 회원 가입 dto 태스트")
+    @DisplayName("유저 회원 가입 dto 테스트")
     public void testUserResponseDto() {
         // given
-        User user = new User();
-        user.setUsername("username");
-        user.setEmail("user@example.com");
-        user.setOne_liner("Intro");
+        SignUpRequestDto dto = new SignUpRequestDto();
+        dto.setUserId("log");
+        dto.setPassword("pass");
+        dto.setUsername("");
+        dto.setEmail("invalid-email");
+        dto.setOne_liner("Intro");
 
         // when
-        UserResponseDto userResponseDto = new UserResponseDto(user);
+        Set<ConstraintViolation<SignUpRequestDto>> violations = validator.validate(dto);
 
         // then
-        assertThat(userResponseDto.getUsername()).isEqualTo("username");
-        assertThat(userResponseDto.getEmail()).isEqualTo("user@example.com");
-        assertThat(userResponseDto.getOne_liner()).isEqualTo("Intro");
+        assertFalse(violations.isEmpty());
+        for (ConstraintViolation<SignUpRequestDto> violation : violations) {
+            System.out.println(violation.getMessage());
+        }
     }
 
 
 
+
     @Test
-    @DisplayName("개시판 생성 태스트")
+    @DisplayName("게시판 생성 테스트")
     public void testCreateBoard() {
         // given
         Board Boards = getBoard();
@@ -127,7 +139,7 @@ public class DtoEntityTest {
 
 
     @Test
-    @DisplayName("개시판 찾기 태스트")
+    @DisplayName("게시판 찾기 테스트")
     public void testFindBoard() {
         // given
         Board Boards = getBoard();
@@ -142,7 +154,7 @@ public class DtoEntityTest {
     }
 
     @Test
-    @DisplayName("개시판 찾기 실패 태스트")
+    @DisplayName("게시판 찾기 실패 테스트")
     public void testFindFailBoard() {
         // given
         getBoard();
@@ -158,7 +170,7 @@ public class DtoEntityTest {
 
     @Test
     @Transactional
-    @DisplayName("개시판 업데이트 태스트")
+    @DisplayName("게시판 업데이트 테스트")
     public void testUpdateBoard() {
         // given
         Board Boards = getBoard();
@@ -175,7 +187,7 @@ public class DtoEntityTest {
     }
 
     @Test
-    @DisplayName("개시판 업데이트 실패 태스트")
+    @DisplayName("게시판 업데이트 실패 테스트")
     public void testUpdateFailBoard() {
         // given
         Board Boards = getBoard();
@@ -193,7 +205,7 @@ public class DtoEntityTest {
     }
 
     @Test
-    @DisplayName("개시판 삭제 태스트")
+    @DisplayName("게시판 삭제 테스트")
     public void testDeleteBoard() {
         // given
         Board Boards = getBoard();
@@ -207,7 +219,7 @@ public class DtoEntityTest {
     }
 
     @Test
-    @DisplayName("개시판 좋아요 태스트")
+    @DisplayName("게시판 좋아요 테스트")
     public void testSetLikecounts() {
         // given
         Board board = getBoard();
@@ -223,23 +235,23 @@ public class DtoEntityTest {
 
 
     @Test
-    @DisplayName("개시판 보기 태스트")
+    @DisplayName("게시판 보기 테스트")
     @Transactional
     public void BoardResponseDtoTest() {
         // given
         Board Boards = getBoard();
 
         // when
-        BoardResponseDto boardResponseDto = new BoardResponseDto(Boards,5L,"태스트 확인");
+        BoardResponseDto boardResponseDto = new BoardResponseDto(Boards,5L,"테스트 확인");
 
         // then
         assertEquals(boardResponseDto.getLikecounts(), 5L);
-        assertEquals(boardResponseDto.getMessage(), "태스트 확인");
+        assertEquals(boardResponseDto.getMessage(), "테스트 확인");
     }
 
 
     @Test
-    @DisplayName("개시판 관계 태스트")
+    @DisplayName("게시판 관계 테스트")
     @Transactional
     public void testUserRelationship() {
         // given
@@ -261,7 +273,7 @@ public class DtoEntityTest {
     }
 
     @Test
-    @DisplayName("댓글 생성 태스트")
+    @DisplayName("댓글 생성 테스트")
     public void CommentRequestDtoTest() {
         // given
         Board Boards = getBoard();
@@ -277,27 +289,27 @@ public class DtoEntityTest {
     }
 
     @Test
-    @DisplayName("댓글 수정 태스트")
+    @DisplayName("댓글 수정 테스트")
     @Transactional
     public void CommentUpdateTest() {
         // given
         Comment comment = new Comment();
-        comment.setContents("태스트 전");
+        comment.setContents("테스트 전");
         commentRepository.save(comment);
 
         CommentRequestDto commentRequestDto = new CommentRequestDto();
-        commentRequestDto.setContents("태스트");
+        commentRequestDto.setContents("테스트");
 
         // when
         comment.update(commentRequestDto);
 
         // then
         assertNotNull(comment.getId());
-        assertEquals(comment.getContents(), "태스트");
+        assertEquals(comment.getContents(), "테스트");
     }
 
     @Test
-    @DisplayName("댓글 보기 태스트")
+    @DisplayName("댓글 보기 테스트")
     @Transactional
     public void CommentResponseDtoTest() {
         // given
@@ -308,15 +320,15 @@ public class DtoEntityTest {
         commentRepository.save(comment);
 
         // when
-        CommentResponseDto commentResponseDto = new CommentResponseDto(comment, 5L, "태스트 확인");
+        CommentResponseDto commentResponseDto = new CommentResponseDto(comment, 5L, "테스트 확인");
 
         // then
         assertEquals(commentResponseDto.getLike_count(), 5L);
-        assertEquals(commentResponseDto.getMessage(), "태스트 확인");
+        assertEquals(commentResponseDto.getMessage(), "테스트 확인");
     }
 
     @Test
-    @DisplayName("댓글 보기 실패 태스트")
+    @DisplayName("댓글 보기 실패 테스트")
     @Transactional
     public void CommentResponseDtoFailTest() {
         // given
@@ -326,12 +338,12 @@ public class DtoEntityTest {
         // when // then
         // null값이 나오면 정상
         NullPointerException commentResponseDto = assertThrows(NullPointerException.class, () -> {
-            new CommentResponseDto(comment, 5L, "태스트 확인");
+            new CommentResponseDto(comment, 5L, "테스트 확인");
         });
     }
 
     @Test
-    @DisplayName("개시판 좋아요 태스트")
+    @DisplayName("게시판 좋아요 테스트")
     public void BoardContentsLikeTest() {
         // given
         Board Boards = getBoard();
@@ -345,7 +357,7 @@ public class DtoEntityTest {
     }
 
     @Test
-    @DisplayName("댓글 좋아요 태스트")
+    @DisplayName("댓글 좋아요 테스트")
     public void CommentContentsLikeTest() {
         // given
         Comment comment = new Comment();

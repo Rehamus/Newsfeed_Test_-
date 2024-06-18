@@ -45,7 +45,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
                 )
         }
 )
-@DisplayName("유져 태스트")
+@DisplayName("유져 테스트")
 class UserControllerTest {
 
     @MockBean
@@ -174,7 +174,7 @@ class UserControllerTest {
     }
 
     @Test
-    @DisplayName("유저 회원 탈퇴 태스트")
+    @DisplayName("유저 회원 탈퇴 테스트")
     void deleteUser() throws Exception {
         // given
         User user = getUser();
@@ -198,7 +198,7 @@ class UserControllerTest {
     }
 
     @Test
-    @DisplayName("유저 프로필 보기 태스트")
+    @DisplayName("유저 프로필 보기 테스트")
     void getUserProfile() throws Exception {
         // given
         User user = getUser();
@@ -218,7 +218,7 @@ class UserControllerTest {
     }
 
     @Test
-    @DisplayName("유저 프로필 수정 태스트")
+    @DisplayName("유저 프로필 수정 테스트")
     void updateUserProfile() throws Exception {
         // given
         User user = getUser();
@@ -240,7 +240,7 @@ class UserControllerTest {
     }
 
     @Test
-    @DisplayName("유저 프로필 사진 삽입 태스트")
+    @DisplayName("유저 프로필 사진 삽입 테스트")
     void pictureUserProfile() throws Exception {
         // Given
         MockMultipartFile imageFile = new MockMultipartFile("Pictur", "image.jpg", MediaType.IMAGE_JPEG_VALUE, "dummy_image_data".getBytes());

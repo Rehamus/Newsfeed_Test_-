@@ -47,7 +47,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
                 )
         }
 )
-@DisplayName("피드 태스트")
+@DisplayName("피드 데스트")
 class FeedControllerTest {
 
     @MockBean
@@ -70,7 +70,7 @@ class FeedControllerTest {
     }
 
     @Test
-    @DisplayName("피드 해둔 개시물 태스트")
+    @DisplayName("피드 해둔 개시물 데스트")
     void getFeed() throws Exception {
         // given
         Board board = getBoard(getUser());

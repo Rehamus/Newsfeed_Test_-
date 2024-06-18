@@ -40,7 +40,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-@DisplayName("개시판 태스트")
+@DisplayName("게시판 테스트")
 class BoardServiceTest {
 
     @Mock
@@ -75,13 +75,13 @@ class BoardServiceTest {
         boardRequestDto = new BoardRequestDto();
         boardRequestDto.setId(1L);
         boardRequestDto.setUser_id(1L);
-        boardRequestDto.setContents("개시판 내용");
+        boardRequestDto.setContents("게시판 내용");
         boardService = new BoardService(
                 boardRepository, multimediaRepository, objectMapper, jwt, contentsLikeRepository);
     }
 
     @Test
-    @DisplayName("개시판 생성 태스트")
+    @DisplayName("게시판 생성 테스트")
     void createBoard() {
         // given
         when(jwt.getTokenUser(servletRequest)).thenReturn(user);
@@ -90,14 +90,14 @@ class BoardServiceTest {
         String board = boardService.createBoard(servletRequest, boardRequestDto);
 
         // then
-        assertEquals("개시판 내용 생성 완료", board);
+        assertEquals("게시판 내용 생성 완료", board);
         System.out.println("결과 반환: " + board);
         verify(boardRepository, times(1)).save(any(Board.class));
 
     }
 
     @Test
-    @DisplayName("개시판 + 미디어 생성 완료")
+    @DisplayName("게시판 + 미디어 생성 완료")
     void createMBoard() {
         MockitoAnnotations.openMocks(this);
 
@@ -113,7 +113,7 @@ class BoardServiceTest {
         String board = boardService.createMBoard(servletRequest, imageFile, movieFile, boardJson);
 
         // then
-        System.out.println("개시판 + 미디어 내용: " + board);
+        System.out.println("게시판 + 미디어 내용: " + board);
         assertEquals("생성 완료", board);
         verify(boardRepository, times(1)).save(any(Board.class));
         verify(multimediaRepository, times(1)).save(any(Multimedia.class));
@@ -175,7 +175,7 @@ class BoardServiceTest {
 
 
     @Test
-    @DisplayName("개시판 전체 가져오기 태스트")
+    @DisplayName("게시판 전체 가져오기 테스트")
     void getBoard() {
         // given
         User user = new User();
@@ -203,7 +203,7 @@ class BoardServiceTest {
     }
 
     @Test
-    @DisplayName("게시판 좋아요 태스트")
+    @DisplayName("게시판 좋아요 테스트")
     void getBoardLike() {
         // given
         List<ContentsLike> contentsLikeList = new ArrayList<>();
@@ -271,7 +271,7 @@ class BoardServiceTest {
 
 
     @Test
-    @DisplayName("게시판 좋아요 취소 태스트")
+    @DisplayName("게시판 좋아요 취소 테스트")
     void getBoardNolike() {
         // given
         List<ContentsLike> contentsLikeList = new ArrayList<>();
@@ -305,7 +305,7 @@ class BoardServiceTest {
     }
 
     @Test
-    @DisplayName("게시판 좋아요 취소 태스트")
+    @DisplayName("게시판 좋아요 취소 테스트")
     void getBoardNolikeFailone() {
         // given
         List<ContentsLike> contentsLikeList = new ArrayList<>();
@@ -403,7 +403,7 @@ class BoardServiceTest {
     }
 
     @Test
-    @DisplayName("개시판 업데이트 태스트")
+    @DisplayName("게시판 업데이트 테스트")
     void updateBoard() {
         // given
         SignUpRequestDto requestDto = new SignUpRequestDto();
@@ -431,7 +431,7 @@ class BoardServiceTest {
     }
 
     @Test
-    @DisplayName("개시판 + 미디어 업데이트 태스트")
+    @DisplayName("게시판 + 미디어 업데이트 테스트")
     void updateMBoard() throws JsonProcessingException {
         // given
         User user = new User();

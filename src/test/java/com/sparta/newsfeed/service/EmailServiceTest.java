@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-@DisplayName("이매일 태스트")
+@DisplayName("이매일 테스트")
 class EmailServiceTest {
 
     @Mock
@@ -22,7 +22,7 @@ class EmailServiceTest {
     EmailService emailService;
 
     @Test
-    @DisplayName("이메일 발송 태스트")
+    @DisplayName("이메일 발송 테스트")
     void sendEmail() {
         // given
         mailSender = Mockito.mock(JavaMailSender.class);

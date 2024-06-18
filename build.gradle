@@ -64,6 +64,8 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
 
+    testImplementation 'org.testcontainers:junit-jupiter'
+    testImplementation 'org.testcontainers:mysql'
     // 중복된 라이브러리 제외
     configurations.all {
         exclude group: 'com.vaadin.external.google', module: 'android-json'
@@ -75,7 +77,11 @@ dependencies {
     testImplementation 'org.mockito:mockito-junit-jupiter'
 
     testImplementation 'org.jacoco:org.jacoco.agent:0.8.12'
+    testImplementation 'com.navercorp.fixturemonkey:fixture-monkey-starter:0.3.2'
 
+    testImplementation 'org.testcontainers:testcontainers:1.17.6'
+    testImplementation 'org.testcontainers:mysql:1.17.6'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 
 jacoco {

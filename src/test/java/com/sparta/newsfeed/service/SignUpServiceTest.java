@@ -32,7 +32,7 @@ import static org.mockito.Mockito.*;
 
 
 @ExtendWith(MockitoExtension.class)
-@DisplayName("회원가입 태스트")
+@DisplayName("회원가입 테스트")
 class SignUpServiceTest {
     @Mock
     private UserRepository userRepository;
@@ -136,7 +136,7 @@ class SignUpServiceTest {
     }
 
     @Test
-    @DisplayName("로그인 태스트")
+    @DisplayName("로그인 테스트")
     void loginUser() {
         // given
         LoginUpRequestDto requestDto = new LoginUpRequestDto();
@@ -165,7 +165,7 @@ class SignUpServiceTest {
 
 
     @Test
-    @DisplayName("로그아웃 태스트")
+    @DisplayName("로그아웃 테스트")
     void logoutUser() {
         // given
         HttpServletRequest request = mock(HttpServletRequest.class);
@@ -188,7 +188,7 @@ class SignUpServiceTest {
     }
 
     @Test
-    @DisplayName("회원 탈퇴 태스트")
+    @DisplayName("회원 탈퇴 테스트")
     void deleteUser() {
         // given
         LoginUpRequestDto requestDto = new LoginUpRequestDto();
